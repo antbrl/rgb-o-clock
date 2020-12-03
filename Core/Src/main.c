@@ -367,8 +367,8 @@ static void MX_GPIO_Init(void)
 void print_val(int32_t val)
 {
 	char str[20];
-	sprintf(str, "%d\r\n", val);
-	HAL_UART_Transmit(&huart2, str, strlen(str), 0xff);
+	sprintf(str, "%ld\r\n", val);
+	HAL_UART_Transmit(&huart2, (uint8_t*) str, strlen(str), 0xff);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
