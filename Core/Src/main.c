@@ -97,6 +97,9 @@ int main(void)
 	MX_TIM1_Init();
 	/* USER CODE BEGIN 2 */
 
+	ws2812_init();
+	stripEffect_AllColors(10);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
