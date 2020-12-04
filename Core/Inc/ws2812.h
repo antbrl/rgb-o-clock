@@ -42,6 +42,7 @@
 
 void ws2812_start(TIM_HandleTypeDef *htim);
 void ws2812_update(TIM_HandleTypeDef *htim);
+void saveLEDbuffer(void);
 void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE);
 void setWHOLEcolor(uint8_t RED, uint8_t GREEN, uint8_t BLUE);
 void fillBufferBlack(void);

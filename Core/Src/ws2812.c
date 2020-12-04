@@ -1,7 +1,9 @@
 #include "ws2812.h"
+#include <string.h>
 
 /* Variables -----------------------------------------------*/
 static uint8_t LEDbuffer[LED_BUFFER_SIZE];
+static uint8_t LEDbuffer_temp[LED_BUFFER_SIZE];
 
 
 
@@ -11,12 +13,19 @@ static uint8_t LEDbuffer[LED_BUFFER_SIZE];
 
 void ws2812_start(TIM_HandleTypeDef *htim)
 {
+	fillBufferBlack();
+	saveLEDbuffer();
 	HAL_TIM_PWM_Start_DMA(htim, TIM_CHANNEL_1, (uint32_t*) LEDbuffer, LED_BUFFER_SIZE);
 }
 
 void ws2812_update(TIM_HandleTypeDef *htim)
 {
 
+}
+
+void saveLEDbuffer(void)
+{
+	memcpy(LEDbuffer, LEDbuffer_temp, LED_BUFFER_SIZE);
 }
 
 void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE)
@@ -34,7 +43,7 @@ void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE)
 		tempBuffer[16 + i] = ((BLUE << i) & 0x80) ? WS2812_1 : WS2812_0;
 
 	for (i = 0; i < 24; i++)
-		LEDbuffer[RESET_SLOTS_BEGIN + LEDindex * 24 + i] = tempBuffer[i];
+		LEDbuffer_temp[RESET_SLOTS_BEGIN + LEDindex * 24 + i] = tempBuffer[i];
 }
 
 void setWHOLEcolor(uint8_t RED, uint8_t GREEN, uint8_t BLUE)
@@ -53,19 +62,19 @@ void fillBufferBlack(void)
 
 	for (index = 0; index < RESET_SLOTS_BEGIN; index++)
 	{
-		LEDbuffer[buffIndex] = WS2812_RESET;
+		LEDbuffer_temp[buffIndex] = WS2812_RESET;
 		buffIndex++;
 	}
 	for (index = 0; index < LED_DATA_SIZE; index++)
 	{
-		LEDbuffer[buffIndex] = WS2812_0;
+		LEDbuffer_temp[buffIndex] = WS2812_0;
 		buffIndex++;
 	}
-	LEDbuffer[buffIndex] = WS2812_0;
+	LEDbuffer_temp[buffIndex] = WS2812_0;
 	buffIndex++;
 	for (index = 0; index < RESET_SLOTS_END; index++)
 	{
-		LEDbuffer[buffIndex] = 0;
+		LEDbuffer_temp[buffIndex] = 0;
 		buffIndex++;
 	}
 }
@@ -78,19 +87,19 @@ void fillBufferWhite(void)
 
 	for (index = 0; index < RESET_SLOTS_BEGIN; index++)
 	{
-		LEDbuffer[buffIndex] = WS2812_RESET;
+		LEDbuffer_temp[buffIndex] = WS2812_RESET;
 		buffIndex++;
 	}
 	for (index = 0; index < LED_DATA_SIZE; index++)
 	{
-		LEDbuffer[buffIndex] = WS2812_1;
+		LEDbuffer_temp[buffIndex] = WS2812_1;
 		buffIndex++;
 	}
-	LEDbuffer[buffIndex] = WS2812_0;
+	LEDbuffer_temp[buffIndex] = WS2812_0;
 	buffIndex++;
 	for (index = 0; index < RESET_SLOTS_END; index++)
 	{
-		LEDbuffer[buffIndex] = 0;
+		LEDbuffer_temp[buffIndex] = 0;
 		buffIndex++;
 	}
 }
