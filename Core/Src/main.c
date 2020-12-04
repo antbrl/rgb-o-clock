@@ -60,7 +60,7 @@ static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_RTC_Init(void);
 /* USER CODE BEGIN PFP */
-
+void print_val(int32_t val);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
