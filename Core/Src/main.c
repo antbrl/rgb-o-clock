@@ -97,7 +97,7 @@ int main(void)
 	MX_TIM1_Init();
 	/* USER CODE BEGIN 2 */
 
-	ws2812_init();
+	ws2812_start(&htim1);
 	stripEffect_AllColors(10);
 
 	/* USER CODE END 2 */

@@ -3,45 +3,20 @@
 /* Variables -----------------------------------------------*/
 static uint8_t LEDbuffer[LED_BUFFER_SIZE];
 
-TIM_HandleTypeDef TimHandle;
-TIM_OC_InitTypeDef sConfig;
-GPIO_InitTypeDef GPIO_InitStruct;
-DMA_HandleTypeDef hdma_tim;
+
 
 /* Functions -----------------------------------------------*/
 
-void ws2812_init(void)
+
+
+void ws2812_start(TIM_HandleTypeDef *htim)
 {
-	fillBufferBlack();
-
-	TimHandle.Instance = TIMx;
-
-	TimHandle.Init.Period = TIMER_PERIOD - 1;
-	TimHandle.Init.RepetitionCounter = LED_BUFFER_SIZE + 1; //LED_BUFFER_SIZE + 1;//0xFFFF;
-	TimHandle.Init.Prescaler = (uint32_t) ((SystemCoreClock / TIMER_CLOCK_FREQ)
-			- 1);
-	TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-	HAL_TIM_PWM_Init(&TimHandle);
-
-	/*##-2- Configure the PWM channel 3 ########################################*/
-	sConfig.OCMode = TIM_OCMODE_PWM1;
-	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfig.OCFastMode = TIM_OCFAST_DISABLE;
-	sConfig.OCIdleState = TIM_OCIDLESTATE_RESET;
-	//sConfig.Pulse        = 0;
-	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-
-	/*##-3- Start PWM signal generation in DMA mode ############################*/
-	HAL_TIM_PWM_Start_DMA(&TimHandle, TIM_CHANNEL_1, (uint32_t*) LEDbuffer,
-	LED_BUFFER_SIZE);
+	HAL_TIM_PWM_Start_DMA(htim, TIM_CHANNEL_1, (uint32_t*) LEDbuffer, LED_BUFFER_SIZE);
 }
 
-void ws2812_update(void)
+void ws2812_update(TIM_HandleTypeDef *htim)
 {
-	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start_DMA(&TimHandle, TIM_CHANNEL_1, (uint32_t*) LEDbuffer,
-	LED_BUFFER_SIZE);
+
 }
 
 void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE)
