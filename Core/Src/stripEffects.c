@@ -1,7 +1,5 @@
 #include "stripEffects.h"
-
-extern void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN,
-		uint8_t BLUE);
+#include "ws2812.h"
 
 /* this array holds the RGB values to represent 
  * a color wheel using 256 steps on each emitter

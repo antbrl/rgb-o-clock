@@ -1,7 +1,7 @@
 #ifndef __STRIPEFFECTS
 #define __STRIPEFFECTS
 
-#include "main.h"
+#include <stdint.h>
 
 #define HEARTBEAT_STEPS		16
 
