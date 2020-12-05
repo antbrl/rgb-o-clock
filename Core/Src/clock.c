@@ -89,43 +89,20 @@ const uint8_t digits[2][10][3][9] =
 void render_ring(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_t seconds, uint8_t ss)
 {
 	uint32_t led;
-	uint32_t led_hours = (hours % 12) * 5 + minutes / 12;
 
 	for (led = 0; led < 60; led++)
-	{
-		// current second
-		if (led == seconds)
-		{
-			setLEDcolor(led, 0, 255 - ss, 255 - ss);
-		}
-		// last second
-		else if ((led + 59) % 60 == seconds)
-		{
-			setLEDcolor(led, 0, ss, ss);
-		}
-		// turn around
-		else if (led == (ss * 60 / 255 + seconds) % 60)
-		{
-			setLEDcolor(led, 0, 2, 2);
-		}
-		// ring
-		else
-		{
-			setLEDcolor(led, 0, 1, 1);
-		}
+		setLEDcolor(led, 0, 1, 1);
 
-		if (led == minutes)
-		{
-			if (led == led_hours)
-				setLEDcolor(led, 255, 255, 0);
-			else
-				setLEDcolor(led, 0, 255, 0);
-		}
-		else if (led == led_hours)
-		{
-			setLEDcolor(led, 255, 0, 0);
-		}
-	}
+	// current second
+	mixLEDcolor(seconds, 0, 255 - ss, 255 - ss);
+	// last second
+	mixLEDcolor((seconds + 1) % 60, 0, ss, ss);
+	// turn around
+	mixLEDcolor((ss * 60 / 255 + seconds) % 60, 0, 2, 2);
+	// minutes
+	mixLEDcolor(minutes, 0, 255, 0);
+	// hours
+	mixLEDcolor((hours % 12) * 5 + minutes / 12, 255, 0, 0);
 }
 
 void render_digit(uint8_t position, uint8_t digit, uint8_t red, uint8_t green, uint8_t blue)
