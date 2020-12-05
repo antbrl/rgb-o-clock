@@ -5,11 +5,7 @@
 static uint8_t LEDbuffer[LED_BUFFER_SIZE];
 static uint8_t LEDbuffer_temp[LED_BUFFER_SIZE];
 
-
-
 /* Functions -----------------------------------------------*/
-
-
 
 void ws2812_start(TIM_HandleTypeDef *htim)
 {

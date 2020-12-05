@@ -111,9 +111,9 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		display_clock(&hrtc, &htim1);
 		/* USER CODE END WHILE */
 
-		display_clock(&hrtc, &htim1);
 		/* USER CODE BEGIN 3 */
 	}
 	/* USER CODE END 3 */
@@ -227,8 +227,8 @@ static void MX_RTC_Init(void)
 	/** Initialize RTC and set the Time and Date
 	 */
 	sTime.Hours = 13;
-	sTime.Minutes = 37;
-	sTime.Seconds = 10;
+	sTime.Minutes = 59;
+	sTime.Seconds = 55;
 	sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	sTime.StoreOperation = RTC_STOREOPERATION_RESET;
 	if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
