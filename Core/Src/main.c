@@ -113,7 +113,7 @@ int main(void)
 	{
 		/* USER CODE END WHILE */
 
-	display_clock(&hrtc, &htim1);
+		display_clock(&hrtc, &htim1);
 		/* USER CODE BEGIN 3 */
 	}
 	/* USER CODE END 3 */
@@ -126,11 +126,11 @@ int main(void)
 void SystemClock_Config(void)
 {
 	RCC_OscInitTypeDef RCC_OscInitStruct =
-	{ 0 };
+		{ 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct =
-	{ 0 };
+		{ 0 };
 	RCC_PeriphCLKInitTypeDef PeriphClkInit =
-	{ 0 };
+		{ 0 };
 
 	/** Configure LSE Drive Capability
 	 */
@@ -145,8 +145,7 @@ void SystemClock_Config(void)
 	/** Initializes the RCC Oscillators according to the specified parameters
 	 * in the RCC_OscInitTypeDef structure.
 	 */
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE
-			| RCC_OSCILLATORTYPE_MSI;
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE | RCC_OSCILLATORTYPE_MSI;
 	RCC_OscInitStruct.LSEState = RCC_LSE_ON;
 	RCC_OscInitStruct.MSIState = RCC_MSI_ON;
 	RCC_OscInitStruct.MSICalibrationValue = 0;
@@ -163,8 +162,7 @@ void SystemClock_Config(void)
 	}
 	/** Initializes the CPU, AHB and APB buses clocks
 	 */
-	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -174,8 +172,7 @@ void SystemClock_Config(void)
 	{
 		Error_Handler();
 	}
-	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC
-			| RCC_PERIPHCLK_USART2;
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC | RCC_PERIPHCLK_USART2;
 	PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
 	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
 	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -200,9 +197,9 @@ static void MX_RTC_Init(void)
 	/* USER CODE END RTC_Init 0 */
 
 	RTC_TimeTypeDef sTime =
-	{ 0 };
+		{ 0 };
 	RTC_DateTypeDef sDate =
-	{ 0 };
+		{ 0 };
 
 	/* USER CODE BEGIN RTC_Init 1 */
 
@@ -266,13 +263,13 @@ static void MX_TIM1_Init(void)
 	/* USER CODE END TIM1_Init 0 */
 
 	TIM_ClockConfigTypeDef sClockSourceConfig =
-	{ 0 };
+		{ 0 };
 	TIM_MasterConfigTypeDef sMasterConfig =
-	{ 0 };
+		{ 0 };
 	TIM_OC_InitTypeDef sConfigOC =
-	{ 0 };
+		{ 0 };
 	TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig =
-	{ 0 };
+		{ 0 };
 
 	/* USER CODE BEGIN TIM1_Init 1 */
 
@@ -396,7 +393,7 @@ static void MX_DMA_Init(void)
 static void MX_GPIO_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct =
-	{ 0 };
+		{ 0 };
 
 	/* GPIO Ports Clock Enable */
 	__HAL_RCC_GPIOC_CLK_ENABLE();
@@ -444,8 +441,6 @@ void print_val(int32_t val)
 	sprintf(str, "%ld\r\n", val);
 	HAL_UART_Transmit(&huart2, (uint8_t*) str, strlen(str), 0xff);
 }
-
-
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {

@@ -93,22 +93,22 @@ void render_ring(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_
 
 	for (led = 0; led < 60; led++)
 	{
-// current second
+		// current second
 		if (led == seconds)
 		{
 			setLEDcolor(led, 0, 255 - ss, 255 - ss);
 		}
-// last second
+		// last second
 		else if ((led + 59) % 60 == seconds)
 		{
 			setLEDcolor(led, 0, ss, ss);
 		}
-// turn around
+		// turn around
 		else if (led == (ss * 60 / 255 + seconds) % 60)
 		{
 			setLEDcolor(led, 0, 2, 2);
 		}
-// ring
+		// ring
 		else
 		{
 			setLEDcolor(led, 0, 1, 1);
