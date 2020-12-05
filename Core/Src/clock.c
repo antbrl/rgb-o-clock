@@ -1,5 +1,6 @@
 #include "clock.h"
 #include "ws2812.h"
+#include <stdbool.h>
 
 const uint8_t digits[2][10][3][9] =
 	{
@@ -89,20 +90,29 @@ const uint8_t digits[2][10][3][9] =
 void render_ring(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_t seconds, uint8_t ss)
 {
 	uint32_t led;
+	uint32_t hours_led = (hours % 12) * 5 + minutes / 12;
+	bool animating_minutes = seconds == 0;
+	bool animating_hours = seconds == 0 && minutes % 12 == 0;
 
 	for (led = 0; led < 60; led++)
 		setLEDcolor(led, 0, 1, 1);
 
 	// current second
-	mixLEDcolor(seconds, 0, 255 - ss, 255 - ss);
-	// last second
-	mixLEDcolor((seconds + 1) % 60, 0, ss, ss);
+	mixLEDcolor(seconds, 0, ss, ss);
+	// last second animation
+	mixLEDcolor((seconds + 59) % 60, 0, 255 - ss, 255 - ss);
 	// turn around
 	mixLEDcolor((ss * 60 / 255 + seconds) % 60, 0, 2, 2);
-	// minutes
-	mixLEDcolor(minutes, 0, 255, 0);
-	// hours
-	mixLEDcolor((hours % 12) * 5 + minutes / 12, 255, 0, 0);
+	// minute
+	mixLEDcolor(minutes, 0, animating_minutes ? ss : 255, 0);
+	// last minute animation
+	if (animating_minutes)
+		mixLEDcolor((minutes + 59) % 60, 0, 255 - ss, 0);
+	// hour
+	mixLEDcolor(hours_led, animating_hours ? ss : 255, 0, 0);
+	// last hour led animation
+	if (animating_hours)
+		mixLEDcolor((hours_led + 59) % 60, 255 - ss, 0, 0);
 }
 
 void render_digit(uint8_t position, uint8_t digit, uint8_t red, uint8_t green, uint8_t blue)
