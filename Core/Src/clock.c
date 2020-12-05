@@ -96,6 +96,10 @@ void render_ring(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_
 
 	for (led = 0; led < 60; led++)
 		setLEDcolor(led, 0, 5, 5);
+	for (led = 0; led < 12; led++)
+			setLEDcolor(60 + led * 4, 0, 5, 5);
+	for (led = 0; led < 4; led++)
+			setLEDcolor(108 + led * 10, 0, 5, 5);
 
 	// current second
 	mixLEDcolor(seconds, 0, ss, ss);
