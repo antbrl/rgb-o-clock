@@ -95,14 +95,14 @@ void render_ring(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_
 	bool animating_hours = seconds == 0 && minutes % 12 == 0;
 
 	for (led = 0; led < 60; led++)
-		setLEDcolor(led, 0, 1, 1);
+		setLEDcolor(led, 0, 5, 5);
 
 	// current second
 	mixLEDcolor(seconds, 0, ss, ss);
 	// last second animation
 	mixLEDcolor((seconds + 59) % 60, 0, 255 - ss, 255 - ss);
 	// turn around
-	mixLEDcolor((ss * 60 / 255 + seconds) % 60, 0, 2, 2);
+	//mixLEDcolor((ss * 60 / 255 + seconds) % 60, 0, 2, 2);
 	// minute
 	mixLEDcolor(minutes, 0, animating_minutes ? ss : 255, 0);
 	// last minute animation
@@ -121,31 +121,56 @@ void render_digit(uint8_t position, uint8_t digit, uint8_t red, uint8_t green, u
 	for (led = 0; led < 9; led++)
 	{
 		if (digits[position / 2][digit][0][led])
-			setLEDcolor(led + 109 + 10 * position, red, green, blue);
+			mixLEDcolor(led + 109 + 10 * position, red, green, blue);
 	}
 	for (led = 0; led < 7; led++)
 	{
 		if (digits[position / 2][digit][1][led])
-			setLEDcolor(led + 149 + 8 * position, red, green, blue);
+			mixLEDcolor(led + 149 + 8 * position, red, green, blue);
 	}
 	for (led = 0; led < 5; led++)
 	{
 		if (digits[position / 2][digit][2][led])
-			setLEDcolor(led + 181 + 6 * position, red, green, blue);
+			mixLEDcolor(led + 181 + 6 * position, red, green, blue);
 	}
 }
 
 void render_digits(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint8_t seconds, uint8_t ss)
 {
-	uint8_t r, g, b;
+	uint8_t r, g, b, r0, g0, b0, r1, g1, b1;
 	r = 50;
 	g = 40;
 	b = 2;
+	r0 = r * ss / 255;
+	g0 = g * ss / 255;
+	b0 = b * ss / 255;
+	r1 = r * (255 - ss) / 255;
+	g1 = g * (255 - ss) / 255;
+	b1 = b * (255 - ss) / 255;
+	uint8_t new_digits[4] =
+		{ hours % 10, minutes % 10, minutes / 10, hours / 10 };
+	uint8_t old_digits[4] =
+		{ (hours + 23 * (minutes == 0)) % 24 % 10, (minutes + 9) % 10, (minutes + 59 * (minutes % 10 == 0)) % 60 / 10,
+				(hours + 23 * (minutes == 0)) % 24 / 10 };
+	bool anim[4] =
+		{ seconds == 0 && new_digits[0] != old_digits[0], seconds == 0 && new_digits[1] != old_digits[1], seconds == 0
+				&& new_digits[2] != old_digits[2], seconds == 0 && new_digits[3] != old_digits[3] };
 
-	render_digit(0, hours % 10, r, g, b);
-	render_digit(1, minutes % 10, r, g, b);
-	render_digit(2, minutes / 10, r, g, b);
-	render_digit(3, hours / 10, r, g, b);
+	// current digits
+	render_digit(0, new_digits[0], anim[0] ? r0 : r, anim[0] ? g0 : g, anim[0] ? b0 : b);
+	render_digit(1, new_digits[1], anim[1] ? r0 : r, anim[1] ? g0 : g, anim[1] ? b0 : b);
+	render_digit(2, new_digits[2], anim[2] ? r0 : r, anim[2] ? g0 : g, anim[2] ? b0 : b);
+	render_digit(3, new_digits[3], anim[3] ? r0 : r, anim[3] ? g0 : g, anim[3] ? b0 : b);
+
+	// last digits
+	if (anim[0])
+		render_digit(0, old_digits[0], r1, g1, b1);
+	if (anim[1])
+		render_digit(1, old_digits[1], r1, g1, b1);
+	if (anim[2])
+		render_digit(2, old_digits[2], r1, g1, b1);
+	if (anim[3])
+		render_digit(3, old_digits[3], r1, g1, b1);
 }
 
 void display_clock(RTC_HandleTypeDef *hrtc, TIM_HandleTypeDef *htim)
