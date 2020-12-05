@@ -79,6 +79,21 @@ void setWHOLEcolor(uint8_t RED, uint8_t GREEN, uint8_t BLUE)
 		setLEDcolor(index, RED, GREEN, BLUE);
 }
 
+void dimBuffer(uint8_t amount)
+{
+	uint32_t index;
+	uint8_t r, g, b;
+
+	if (amount > 100)
+		amount = 100;
+
+	for (index = 0; index < LED_NUMBER; index++)
+	{
+		getLEDcolor(index, &r, &g, &b);
+		setLEDcolor(index, r * (100 - amount) / 100, g * (100 - amount) / 100, b * (100 - amount) / 100);
+	}
+}
+
 void fillBufferBlack(void)
 {
 	/*Fill LED buffer - ALL OFF*/

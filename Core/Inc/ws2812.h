@@ -48,6 +48,7 @@ void getLEDcolor(uint32_t LEDnumber, uint8_t *RED, uint8_t *GREEN, uint8_t *BLUE
 void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE);
 void mixLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE);
 void setWHOLEcolor(uint8_t RED, uint8_t GREEN, uint8_t BLUE);
+void dimBuffer(uint8_t amount);
 void fillBufferBlack(void);
 void fillBufferWhite(void);
 

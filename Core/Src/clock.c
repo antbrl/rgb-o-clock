@@ -193,6 +193,8 @@ void display_clock(RTC_HandleTypeDef *hrtc, TIM_HandleTypeDef *htim)
 	render_ring(hrtc, h, m, s, ss);
 	render_digits(hrtc, h, m, s, ss);
 
+	dimBuffer(50);
+
 	ws2812_update(htim);
 
 	HAL_Delay(10);
