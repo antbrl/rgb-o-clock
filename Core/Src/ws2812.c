@@ -20,7 +20,12 @@ void ws2812_start(TIM_HandleTypeDef *htim)
 
 void ws2812_update(TIM_HandleTypeDef *htim)
 {
+	HAL_TIM_PWM_Start_DMA(htim, TIM_CHANNEL_1, (uint32_t*) LEDbuffer, LED_BUFFER_SIZE);
+}
 
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+	HAL_TIM_PWM_Stop_DMA(htim, TIM_CHANNEL_1);
 }
 
 void saveLEDbuffer(void)
@@ -43,7 +48,7 @@ void setLEDcolor(uint32_t LEDnumber, uint8_t RED, uint8_t GREEN, uint8_t BLUE)
 		tempBuffer[16 + i] = ((BLUE << i) & 0x80) ? WS2812_1 : WS2812_0;
 
 	for (i = 0; i < 24; i++)
-		LEDbuffer_temp[RESET_SLOTS_BEGIN + LEDindex * 24 + i] = tempBuffer[i];
+		LEDbuffer[RESET_SLOTS_BEGIN + LEDindex * 24 + i] = tempBuffer[i];
 }
 
 void setWHOLEcolor(uint8_t RED, uint8_t GREEN, uint8_t BLUE)

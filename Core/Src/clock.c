@@ -161,30 +161,29 @@ void render_digits(RTC_HandleTypeDef *hrtc, uint8_t hours, uint8_t minutes, uint
 	render_digit(3, hours / 10, r, g, b);
 }
 
-void display_clock(RTC_HandleTypeDef *hrtc)
+void display_clock(RTC_HandleTypeDef *hrtc, TIM_HandleTypeDef *htim)
 {
 	RTC_TimeTypeDef sTime;
 	RTC_DateTypeDef sDate;
 	uint8_t h, m, s, ss;
 
-	while (1)
-	{
-// get time
-		HAL_RTC_GetDate(hrtc, &sDate, RTC_FORMAT_BIN);
-		HAL_RTC_GetTime(hrtc, &sTime, RTC_FORMAT_BIN);
-		h = sTime.Hours;
-		m = sTime.Minutes;
-		s = sTime.Seconds;
-		ss = 255 - sTime.SubSeconds;
+	// get time
+	HAL_RTC_GetDate(hrtc, &sDate, RTC_FORMAT_BIN);
+	HAL_RTC_GetTime(hrtc, &sTime, RTC_FORMAT_BIN);
+	h = sTime.Hours;
+	m = sTime.Minutes;
+	s = sTime.Seconds;
+	ss = 255 - sTime.SubSeconds;
 
-// background
-		setWHOLEcolor(0, 0, 0);
+	// background
+	setWHOLEcolor(0, 0, 0);
 
-		render_ring(hrtc, h, m, s, ss);
-		render_digits(hrtc, h, m, s, ss);
+	render_ring(hrtc, h, m, s, ss);
+	render_digits(hrtc, h, m, s, ss);
 
-		saveLEDbuffer();
+	ws2812_update(htim);
 
-		HAL_Delay(10);
-	}
+	HAL_Delay(10);
+	//saveLEDbuffer();
+
 }

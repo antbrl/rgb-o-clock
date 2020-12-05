@@ -104,7 +104,6 @@ int main(void)
 	/* USER CODE BEGIN 2 */
 
 	ws2812_start(&htim1);
-	display_clock(&hrtc);
 
 	/* USER CODE END 2 */
 
@@ -114,6 +113,7 @@ int main(void)
 	{
 		/* USER CODE END WHILE */
 
+	display_clock(&hrtc, &htim1);
 		/* USER CODE BEGIN 3 */
 	}
 	/* USER CODE END 3 */
@@ -444,6 +444,8 @@ void print_val(int32_t val)
 	sprintf(str, "%ld\r\n", val);
 	HAL_UART_Transmit(&huart2, (uint8_t*) str, strlen(str), 0xff);
 }
+
+
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
